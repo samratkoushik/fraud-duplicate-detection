@@ -13,6 +13,10 @@ a good / bad / grey decision split that sends only the grey band to underwriting
 Everything here runs on **synthetic data**. No real applicant information is
 used or included.
 
+**Live demo:** [fraud-duplicate-detection.streamlit.app](https://fraud-duplicate-detection.streamlit.app) —
+the review console below, hosted on Streamlit Community Cloud against the
+same 10,000-record dataset committed in this repo.
+
 ---
 
 ## Results
@@ -248,6 +252,11 @@ architecture.
 
 ### Review dashboard
 
+**Try it live:** [fraud-duplicate-detection.streamlit.app](https://fraud-duplicate-detection.streamlit.app)
+(hosted on Streamlit Community Cloud, auto-redeploys on every push to `main`).
+
+Or run it locally:
+
 ```bash
 make dashboard
 ```
@@ -255,7 +264,10 @@ make dashboard
 The console shows the review queue ordered by confidence, an aligned
 field-by-field diff with per-field agreement verdicts, the component scores
 behind the confidence, the normalised values the matcher actually compared, and
-one-click disposition writing to an audit log.
+one-click disposition writing to an audit log. (On the hosted demo, the audit
+log lives on Streamlit Cloud's ephemeral filesystem — reviewer actions there
+don't persist across redeploys; a local `make dashboard` run persists to
+`results/review_audit_log.csv` on disk.)
 
 ### Search benchmark
 
