@@ -1,7 +1,7 @@
 PY := .venv/bin/python
 PIP := .venv/bin/pip
 
-.PHONY: help setup fetch-search data match eval decide search dashboard test all clean
+.PHONY: help setup fetch-search data match eval decide search screen dashboard test all clean
 
 help:
 	@echo "setup      create venv and install dependencies"
@@ -11,6 +11,7 @@ help:
 	@echo "eval       blocking recall, threshold sweep, recall by difficulty"
 	@echo "decide     three-tier decision simulation"
 	@echo "search     index into Elasticsearch and benchmark query latency"
+	@echo "screen     demo: screen applicants one at a time against a live index"
 	@echo "dashboard  launch the Streamlit review console"
 	@echo "test       run the unit test suite"
 	@echo "all        data -> match -> eval -> decide"
@@ -37,6 +38,9 @@ decide:
 
 search:
 	cd src && ../$(PY) search_index.py
+
+screen:
+	cd src && ../$(PY) match_streaming.py
 
 dashboard:
 	.venv/bin/streamlit run src/app.py

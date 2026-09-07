@@ -130,6 +130,31 @@ reported alongside it. Interestingly the search layer beats the batch pipeline o
 adversarial cases (92.5% vs 85.8%) — BM25 over analysed name and address fields
 picks up weak corroborating evidence that the fixed-weight blend discards.
 
+### 5. Scaling past one machine's memory
+
+`matching.py` dedupes a batch against itself, which is the wrong shape once
+the existing book no longer fits in memory: it builds every candidate pair
+up front. Real underwriting traffic has the opposite shape — one new
+application at a time, screened against a book of any size — which is
+exactly the single-round-trip ES query above. `src/match_streaming.py`
+wires that query to the same field-level scoring (`matching.score_pair`)
+and the same tiering thresholds (`decision.assign_tier`), so a screening
+decision costs one ES round trip regardless of whether the existing book
+holds 10K applicants or 50M. Nothing about the matching logic changes —
+only how candidates are generated. Run the demo with `make screen` (needs
+a running index — see `make search` below); `tests/test_match_streaming.py`
+checks it reaches the same tier as the batch pipeline without needing a
+live ES node.
+
+This is an approximation of the batch pipeline, not a guaranteed match —
+verified live against 300 real applicants from the shipped dataset, it
+reached the same disposition as the batch pipeline for **299/300 (99.7%)**.
+The one disagreement happened because ES's top-10 BM25 retrieval didn't
+surface the same candidate the batch pipeline's exhaustive blocking found;
+exact-identifier hits (PAN/phone/email) always agree, since those don't
+depend on retrieval ranking, but fuzzy-only matches near a tier boundary
+can occasionally disagree.
+
 ---
 
 ## How it works
@@ -191,9 +216,11 @@ src/
   evaluate.py        blocking recall, threshold sweep, recall by difficulty
   decision.py        three-tier policy and manual-workload simulation
   search_index.py    Elasticsearch index, dedupe query, latency benchmark
+  match_streaming.py per-applicant screening against a live index, any book size
   app.py             Streamlit review console
 tests/
-  test_matching.py   24 unit tests
+  test_matching.py         24 unit tests
+  test_match_streaming.py  streaming/batch tier-agreement tests
 scripts/
   start_search.sh    launch a local single-node Elasticsearch
 results/             generated metrics (JSON + CSV)
