@@ -1,5 +1,10 @@
 # Duplicate & Fraud Applicant Detection for Loan Underwriting
 
+[![CI](https://github.com/samratkoushik/fraud-duplicate-detection/actions/workflows/ci.yml/badge.svg)](https://github.com/samratkoushik/fraud-duplicate-detection/actions/workflows/ci.yml)
+[![Live demo](https://img.shields.io/badge/demo-streamlit.app-FF4B4B?logo=streamlit&logoColor=white)](https://fraud-duplicate-detection.streamlit.app)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg)](#license)
+
 An entity-resolution pipeline that finds duplicate and identity-manipulated loan
 applicants, scores each match by confidence, and routes only genuinely ambiguous
 cases to a human reviewer.
@@ -13,9 +18,18 @@ a good / bad / grey decision split that sends only the grey band to underwriting
 Everything here runs on **synthetic data**. No real applicant information is
 used or included.
 
-**Live demo:** [fraud-duplicate-detection.streamlit.app](https://fraud-duplicate-detection.streamlit.app) —
-the review console below, hosted on Streamlit Community Cloud against the
-same 10,000-record dataset committed in this repo.
+**🔗 [Live demo](https://fraud-duplicate-detection.streamlit.app)** — the
+review console, hosted on Streamlit Community Cloud against the same
+10,000-record dataset committed in this repo.
+
+## Contents
+
+- [Results](#results)
+- [How it works](#how-it-works)
+- [Repository layout](#repository-layout)
+- [Running it](#running-it)
+- [Limitations](#limitations)
+- [License](#license)
 
 ---
 
